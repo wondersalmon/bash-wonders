@@ -15,5 +15,5 @@ cd $path
 wget -O wallpaper.jpg "http://www.bing.com/$(wget -q -O- https://binged.it/2ZButYc | sed -e 's/<[^>]*>//g' | cut -d / -f2 | cut -d \& -f1)"
 #Set the downloaded image as the desktop background
 xfconf-query -c xfce4-desktop -p $monitor -s "$path/wallpaper.jpg"
-break
+sleep 3600
 done

@@ -40,7 +40,6 @@ If the wallpaper does not change on the first run, try running the command: `xfc
 
 ## Scheduling
 
-To make the script run automatically you can use the command `systemd-run --on-boot=180 --on-unit-active=14400 /path/to/folder/bingwall.sh`
-You can specify your own values (in seconds)
+The easiest way is to use cron, or just add a script to autoload. the script has a loop set to restart every hour. The easiest way is to use cron, or just add a script to autoload. the script has a loop set to restart every hour. You can change the interval by specifying the time after the `sleep` in seconds at the end of the script (3600 by default)
 
 *Enjoy your new Bing wallpaper!*

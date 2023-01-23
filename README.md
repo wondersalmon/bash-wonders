@@ -44,3 +44,7 @@ Used dependencies:
 ### bingwall.sh
 
 1. Run the script: `sh bingwall.sh`
+
+### gamemode-watch.sh
+
+The script monitors the [gamemode](https://github.com/FeralInteractive/gamemode) status and sends a notification. the loop is configured to check the state every 10 seconds, you can change this interval by specifying a different value in the `sleep` field (in seconds). Just add this script to autoload to make it work automatically
