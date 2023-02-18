@@ -3,7 +3,7 @@
 
 A simple shell script to set Bing's picture of the day as your desktop wallpaper in XFCE.
 
-The script checks the availability of the bing site, and if the site is available, downloads the image of the day from the site and sets it as wallpaper on the XFCE4 desktop. If the site is not available, the script repeats the check every 20 seconds
+The script checks the availability of the bing site, and if the site is available, downloads the image of the day from the site and sets it as wallpaper on the XFCE4 desktop. If the site is not available, the script repeats the check every 20 seconds. The script is executed every 3 hours. to change this time edit the line `sleep 10800` (line 33) or delete it
 
 ## Dependencies
 
