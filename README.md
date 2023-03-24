@@ -12,7 +12,7 @@ This simple script is used for sending notifications of operations through Teleg
 
 ## 3. bingwall
 
-This script allows users to easily set the Bing Day Image as the XFCE4 desktop wallpaper. The script downloads the image and sets it as the wallpaper, and also allows the user to set the refresh rate of the wallpaper. No junk or big dependencies, fast and easy. Additional information in [bingwall.md](https://github.com/wondersalmon/bash-wonders/bingwall/bingwall.md)
+This script allows users to easily set the Bing Day Image as the XFCE4 desktop wallpaper. The script downloads the image and sets it as the wallpaper, and also allows the user to set the refresh rate of the wallpaper. No junk or big dependencies, fast and easy. Additional information in [bingwall.md](https://github.com/wondersalmon/bash-wonders/blob/main/bingwall/Readme.md)
 
 ## 4. net-diag
 
