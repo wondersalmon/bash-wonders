@@ -1,44 +1,65 @@
 #!/bin/bash
 
-path="$HOME/Pictures/bing"
-monitor="/backdrop/screen0/monitoreDP1/workspace0/last-image"
+# Constants
+IMAGE_PATH="$HOME/Pictures/bing"
+MONITOR="/backdrop/screen0/monitoreDP1/workspace0/last-image"
+MAX_IMAGES=10
+SLEEP_TIME=10400 ##in seconds
+BING_IMAGE_URL="https://bing.com"
 
 # Create the folder if it does not exist
-if [ ! -d "$path" ]; then
-    mkdir -p "$path"
+if [ ! -d "$IMAGE_PATH" ]; then
+    mkdir -p "$IMAGE_PATH"
 fi
 
-while true; do
-    # Check internet connectivity
-    if ping -q -c 1 -W 1 google.com >/dev/null; then
-        # Get the current date and time
-        current_time=$(date +"%Y-%m-%d_%H-%M-%S")
-        # Download the Bing image of the day and save it to the specified path
-        image_url="http://www.bing.com/$(wget -q -O- https://binged.it/2ZButYc | sed -e 's/<[^>]*>//g' | cut -d / -f2 | cut -d \& -f1)"
-        image_title=$(echo $image_url | sed 's/.*OHR\.\(.*\)_ROW.*/\1/')
-        image_extension=$(echo $image_url | sed 's/.*\.\(jpg\|jpeg\|png\|gif\)/\1/')
-        image_name="$current_time-$image_title.$image_extension"
-        cd $path
-        # Check if the image has already been downloaded
-        if [ ! -f "$path/$image_name" ]; then
-            # Download the image and save it with the current date and time in the filename
-            wget -O "$image_name" "$image_url"
-            # Set the downloaded image as the desktop background
-            xfconf-query -c xfce4-desktop -p $monitor -s "$path/$image_name"
-            # Check if the previous wallpaper was the same as the current one
-            previous_wallpaper=$(xfconf-query -c xfce4-desktop -p $monitor -v | cut -d/ -f 5)
-            if [ "$previous_wallpaper" != "$image_name" ]; then
-                # Send a notification with the image title
-                notify-send "Bing Wallpaper" "New wallpaper has been set: $image_title"
-            fi
-        fi
-        # Remove any images older than the last 10 images
-        ls -t | grep -v / | tail -n +11 | xargs -I {} rm -- {}
+function check_internet_connectivity() {
+    if curl -s --head https://www.google.com | head -n 1 | grep "HTTP/2.[200].." > /dev/null; then
+        return 0
     else
         echo "No internet connection. Retrying in 20 seconds."
         sleep 20
-        continue
+        return 1
     fi
-    # Sleep for 1 hour
-    sleep 3600
+}
+
+function download_bing_image() {
+    local image_info=$(curl -s "https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=en-US")
+    local image_url=$(echo "$image_info" | jq -r '.images[0].url' | sed 's/&pid=hp//')
+    local image_title=$(echo "$image_info" | jq -r '.images[0].title')
+    local image_extension=$(echo "$image_url" | sed 's/.*\.\([^.]*\)$/\1/')
+    local image_name="$image_title.$image_extension"
+
+    if [ ! -f "$IMAGE_PATH/$image_name" ]; then
+        curl -s "https://www.bing.com$image_url" -o "$IMAGE_PATH/$image_name"
+        if [ -f "$IMAGE_PATH/$image_name" ]; then
+            xfconf-query -c xfce4-desktop -p $MONITOR -s "$IMAGE_PATH/$image_name"
+            notify-send "New wallpaper has been set: $image_title"
+            return 0
+        else
+            return 1
+        fi
+    fi
+}
+
+function remove_old_images() {
+    local image_count=$(find "$IMAGE_PATH" -maxdepth 1 -type f | wc -l)
+    if [ "$image_count" -gt "$MAX_IMAGES" ]; then
+        local images_to_remove=$((image_count - MAX_IMAGES))
+        find "$IMAGE_PATH" -maxdepth 1 -type f -printf '%T+ %p\n' | sort | head -n "$images_to_remove" | cut -d' ' -f2- | xargs -I {} rm -- {}
+    fi
+}
+
+while true; do
+    if check_internet_connectivity; then
+        if download_bing_image; then
+            remove_old_images
+sleep $SLEEP_TIME
+else
+echo "Failed to download Bing image"
+sleep 20
+fi
+else
+echo "No internet connection. Retrying in 20 seconds."
+sleep 20
+fi
 done

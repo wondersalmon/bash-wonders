@@ -8,14 +8,14 @@ backup_path="path/to/yandex/folder"
 telegram_script='./telegram.sh'
 
 # Specify folders for backup if not all are needed
-directories_to_backup="folder1 folder2 folder3"
+backup_dir="folder names"
 
 # Create backup folder with current date
 current_date=$(date +"%Y-%m-%d")
 mkdir -p "$backup_path/$current_date"
 
 # Starting the for loop, where for each value of the variable (the list in it) we do (do) a set of actions
-for dir in $directories_to_backup; do
+for dir in $backup_dir; do
     echo "Copying $source_path/$dir to $backup_path/$current_date" 
     rsync -avh  "$source_path/$dir" "$backup_path/$current_date"
 done
@@ -40,7 +40,7 @@ backup_list=$(ls "$backup_path" | grep "backup_")
 current_month=$(date +"%m")
 
 # Set the date when the backup will be considered obsolete.
-expire_date=$(date +"%d" -d '-3 day')
+expire_date=$(date +"%d" -d '-7 day')
 echo "Deleting backups older than $(date +"%d.%m.%Y" -d '-3 day')"
 for file in $backup_list; do
     # Get backup date
