@@ -25,3 +25,7 @@ The script monitors the [gamemode](https://github.com/FeralInteractive/gamemode)
 ## 6. sshmenu
 
 This Bash script allows you to easily select and connect to a SSH server from your settings file `(~/.ssh/config)`, with the added bonus of showing the availability status of each server.
+
+## 7. dotback
+
+A simple shell script for backing up and restoring your `dotfiles` (configuration files) using GitHub.
