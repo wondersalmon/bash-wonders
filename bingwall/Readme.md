@@ -23,7 +23,7 @@ This script is written specifically for XFCE. If you use GNOME, there is an exte
 
 ## Tuning
 
-There are 2 variables in the script that can be changed:
+There are some variables in the script that can be changed:
 
 - `IMAGE_PATH`: where to save the wallpaper
 - `MONITOR`: a string indicating the monitor
