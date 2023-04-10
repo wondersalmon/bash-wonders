@@ -15,7 +15,6 @@ FILES_TO_BACKUP=(
   ~/.zsh_history
   ~/nanorc
   ~/.ssh/config
-  ~/Documents
 )
 
 # Show the menu
